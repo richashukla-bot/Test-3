@@ -259,7 +259,7 @@
       <div class="kpi-grid" id="kpiGrid"></div>
       <div class="chart-grid">
         <div class="chart-card">
-          <h3>Monthly Booking Cost <small id="chartPeriodLabel"></small></h3>
+          <h3>Monthly Revenue <small id="chartPeriodLabel"></small></h3>
           <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
         </div>
         <div class="chart-card">
@@ -273,7 +273,7 @@
           <span class="badge badge-blue">All Time</span>
         </div>
         <table>
-          <thead><tr><th>#</th><th>Sales Person</th><th>Booking Cost</th><th>Deals</th><th>Avg Deal</th><th>Target %</th><th>Trend</th></tr></thead>
+          <thead><tr><th>#</th><th>Sales Person</th><th>Total Revenue</th><th>Deals</th><th>Avg Deal</th><th>Target %</th><th>Trend</th></tr></thead>
           <tbody id="leaderBody"></tbody>
         </table>
       </div>
@@ -290,7 +290,7 @@
         </div>
       </div>
       <div class="chart-grid">
-        <div class="chart-card"><h3>Booking Cost Trend</h3><div class="chart-wrap"><canvas id="perfLineChart"></canvas></div></div>
+        <div class="chart-card"><h3>Revenue Trend</h3><div class="chart-wrap"><canvas id="perfLineChart"></canvas></div></div>
         <div class="chart-card"><h3>Payment Overview</h3><div class="chart-wrap"><canvas id="winRateChart"></canvas></div></div>
       </div>
       <div class="table-card">
@@ -306,7 +306,7 @@
           <table>
             <thead><tr>
               <th>Sales Person</th><th>Client</th><th>Email</th><th>Services</th><th>Deal</th>
-              <th>Total Cost</th><th>Upfront</th><th>Booking</th><th>Remaining</th>
+              <th>Total Cost</th><th>Upfront</th><th>Remaining</th>
               <th>Date</th><th style="width:80px">Actions</th>
             </tr></thead>
             <tbody id="dealsBody"></tbody>
@@ -332,7 +332,7 @@
         <input type="file" id="fileInput" accept=".csv" onchange="handleFileUpload(event)">
       </div>
       <div class="info-note" style="margin-bottom:24px">
-        📌 <strong>Expected columns:</strong> salesperson, client, services, upfrontpaid, bookingcost, amountreceived, date, deals
+        📌 <strong>Expected columns:</strong> salesperson, client, services, totalcost, upfrontpaid, amountreceived, date, deals
       </div>
       <div class="chart-card" id="csvPreviewCard" style="display:none">
         <h3>📄 Preview <small id="csvFileName"></small></h3>
@@ -431,21 +431,15 @@
       </div>
     </div>
 
-    <!-- Total Project Cost (full width) -->
-    <div class="form-group">
-      <label>Total Project Cost (₹)</label>
-      <input type="number" id="m_totalCost" placeholder="0" min="0" oninput="calcRemaining()">
-    </div>
-
-    <!-- Upfront Amount + Booking Cost -->
+    <!-- Total Project Cost + Upfront Amount -->
     <div class="form-row">
+      <div class="form-group">
+        <label>Total Project Cost (₹)</label>
+        <input type="number" id="m_totalCost" placeholder="0" min="0" oninput="calcRemaining()">
+      </div>
       <div class="form-group">
         <label>Upfront Amount (₹)</label>
         <input type="number" id="m_upfrontPaid" placeholder="0" min="0" oninput="calcRemaining()">
-      </div>
-      <div class="form-group">
-        <label>Booking Cost (₹)</label>
-        <input type="number" id="m_bookingCost" placeholder="0" min="0" oninput="calcRemaining()">
       </div>
     </div>
 
@@ -457,7 +451,7 @@
           <input type="number" id="m_remainingAmount" placeholder="0" readonly class="readonly-input" tabindex="-1">
           <span class="auto-badge">AUTO</span>
         </div>
-        <div style="font-size:11px;color:var(--text3);margin-top:5px">Total − Upfront − Booking</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:5px">Total − Upfront</div>
       </div>
       <div class="form-group">
         <label>Date</label>
@@ -518,7 +512,6 @@ async function loadDealsFromDB() {
       services:        r.services         || '',
       totalCost:       r.total_cost       || 0,
       upfrontPaid:     r.upfront_paid     || 0,
-      bookingCost:     r.booking_cost     || 0,
       remainingAmount: r.remaining_amount || 0,
       dealNumber:      r.deal_number      || 'Deal #1',
       date:            r.date             || '',
@@ -557,7 +550,6 @@ async function saveEntryToDB(entry, id) {
     services:         entry.services,
     total_cost:       entry.totalCost,
     upfront_paid:     entry.upfrontPaid,
-    booking_cost:     entry.bookingCost,
     remaining_amount: entry.remainingAmount,
     deal_number:      entry.dealNumber,
     date:             entry.date,
@@ -663,10 +655,10 @@ function getFilteredData() {
 
 function summarise(data) {
   const map={};
-  salesPersons.forEach(sp=>map[sp]={bookingCost:0,deals:0,total:0});
+  salesPersons.forEach(sp=>map[sp]={totalCost:0,deals:0,total:0});
   data.forEach(r=>{
-    if(!map[r.salesperson])map[r.salesperson]={bookingCost:0,deals:0,total:0};
-    map[r.salesperson].bookingCost+=(r.bookingCost||0);
+    if(!map[r.salesperson])map[r.salesperson]={totalCost:0,deals:0,total:0};
+    map[r.salesperson].totalCost+=(r.totalCost||0);
     map[r.salesperson].deals+=(r.deals||1);
     map[r.salesperson].total++;
   });
@@ -676,8 +668,7 @@ function summarise(data) {
 function calcRemaining() {
   const total   = parseFloat(document.getElementById('m_totalCost').value)   || 0;
   const upfront = parseFloat(document.getElementById('m_upfrontPaid').value) || 0;
-  const booking = parseFloat(document.getElementById('m_bookingCost').value) || 0;
-  document.getElementById('m_remainingAmount').value = Math.max(0, total - upfront - booking);
+  document.getElementById('m_remainingAmount').value = Math.max(0, total - upfront);
 }
 
 // Auto-detect deal number from Supabase by client name or email
@@ -720,16 +711,16 @@ function refreshCharts(){ renderAll(); }
 
 function renderKPIs() {
   const d=getFilteredData();
-  const totalBooking  =d.reduce((a,r)=>a+(r.bookingCost||0),0);
-  const totalReceived =d.reduce((a,r)=>a+(r.amountReceived||0),0);
+  const totalCost     =d.reduce((a,r)=>a+(r.totalCost||0),0);
+  const totalUpfront  =d.reduce((a,r)=>a+(r.upfrontPaid||0),0);
   const totalRemaining=d.reduce((a,r)=>a+(r.remainingAmount||0),0);
   const totalDeals    =d.reduce((a,r)=>a+(r.deals||1),0);
-  const avgDeal=totalDeals?Math.round(totalBooking/totalDeals):0;
+  const avgDeal=totalDeals?Math.round(totalCost/totalDeals):0;
   const kpis=[
-    {label:'Total Booking Cost',val:fmt(totalBooking),  delta:'+12.4%',up:true, icon:'💰',col:'#4f7cff'},
-    {label:'Amount Received',   val:fmt(totalReceived), delta:'+8.1%', up:true, icon:'✅',col:'#00e5a0'},
-    {label:'Remaining Amount',  val:fmt(totalRemaining),delta:'',      up:false,icon:'⏳',col:'#ffb830'},
-    {label:'Avg Deal Size',     val:fmt(avgDeal),       delta:'-1.5%', up:false,icon:'📊',col:'#ff5f7e'},
+    {label:'Total Revenue',    val:fmt(totalCost),     delta:'+12.4%',up:true, icon:'💰',col:'#4f7cff'},
+    {label:'Upfront Received', val:fmt(totalUpfront),  delta:'+8.1%', up:true, icon:'✅',col:'#00e5a0'},
+    {label:'Remaining Amount', val:fmt(totalRemaining),delta:'',      up:false,icon:'⏳',col:'#ffb830'},
+    {label:'Avg Deal Size',    val:fmt(avgDeal),       delta:'-1.5%', up:false,icon:'📊',col:'#ff5f7e'},
   ];
   document.getElementById('kpiGrid').innerHTML=kpis.map(k=>`
     <div class="kpi-card" style="--card-color:${k.col}">
@@ -743,15 +734,15 @@ function renderKPIs() {
 function renderCharts() {
   const d=getFilteredData();
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const bookingByMonth=Array(12).fill(0);
-  d.forEach(r=>{bookingByMonth[new Date(r.date).getMonth()]+=(r.bookingCost||0);});
+  const revByMonth=Array(12).fill(0);
+  d.forEach(r=>{revByMonth[new Date(r.date).getMonth()]+=(r.totalCost||0);});
   const catMap={};
-  d.forEach(r=>{catMap[r.services]=(catMap[r.services]||0)+(r.bookingCost||0);});
+  d.forEach(r=>{catMap[r.services]=(catMap[r.services]||0)+(r.totalCost||0);});
 
   if(revenueChartInst)revenueChartInst.destroy();
   revenueChartInst=new Chart(document.getElementById('revenueChart'),{
     type:'line',
-    data:{labels:months,datasets:[{label:'Booking Cost',data:bookingByMonth,borderColor:'#4f7cff',backgroundColor:'rgba(79,124,255,0.08)',fill:true,tension:0.4,pointBackgroundColor:'#4f7cff',pointRadius:4}]},
+    data:{labels:months,datasets:[{label:'Revenue',data:revByMonth,borderColor:'#4f7cff',backgroundColor:'rgba(79,124,255,0.08)',fill:true,tension:0.4,pointBackgroundColor:'#4f7cff',pointRadius:4}]},
     options:chartOpts()
   });
 
@@ -772,7 +763,7 @@ function chartOpts(){
 function renderLeaderboard() {
   const d=getFilteredData();
   const sum=summarise(d);
-  const sorted=Object.entries(sum).filter(([,v])=>v.bookingCost>0).sort((a,b)=>b[1].bookingCost-a[1].bookingCost);
+  const sorted=Object.entries(sum).filter(([,v])=>v.totalCost>0).sort((a,b)=>b[1].totalCost-a[1].totalCost);
   const medals=['🥇','🥈','🥉'];
   const body=document.getElementById('leaderBody');
   if(!sorted.length){
@@ -781,13 +772,13 @@ function renderLeaderboard() {
   }
   body.innerHTML=sorted.map(([sp,v],i)=>{
     const tgt=targets[sp]||500000;
-    const pct=Math.min(100,Math.round(v.bookingCost/tgt*100));
+    const pct=Math.min(100,Math.round(v.totalCost/tgt*100));
     return`<tr>
       <td><span class="rank-num">${medals[i]||'#'+(i+1)}</span></td>
       <td style="font-weight:600;color:var(--text)">${sp}</td>
-      <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">${fmt(v.bookingCost)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">${fmt(v.totalCost)}</td>
       <td>${v.deals}</td>
-      <td class="mono">${v.deals?fmt(Math.round(v.bookingCost/v.deals)):'—'}</td>
+      <td class="mono">${v.deals?fmt(Math.round(v.totalCost/v.deals)):'—'}</td>
       <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><span style="font-size:12px;color:var(--text2)">${pct}%</span></div></td>
       <td><span class="badge ${pct>=80?'badge-green':pct>=50?'badge-yellow':'badge-red'}">${pct>=80?'On Track':pct>=50?'Progressing':'Below'}</span></td>
     </tr>`;
@@ -799,21 +790,20 @@ function renderPerformancePage() {
   let d=currentRole==='sales'?sampleData.filter(r=>r.salesperson===currentUser):[...sampleData];
   if(spf)d=d.filter(r=>r.salesperson===spf);
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const bookingByMonth=Array(12).fill(0);
-  d.forEach(r=>{bookingByMonth[new Date(r.date).getMonth()]+=(r.bookingCost||0);});
+  const revByMonth=Array(12).fill(0);
+  d.forEach(r=>{revByMonth[new Date(r.date).getMonth()]+=(r.totalCost||0);});
   if(perfLineInst)perfLineInst.destroy();
   perfLineInst=new Chart(document.getElementById('perfLineChart'),{
     type:'bar',
-    data:{labels:months,datasets:[{data:bookingByMonth,backgroundColor:bookingByMonth.map(v=>v>0?'rgba(79,124,255,0.7)':'rgba(79,124,255,0.1)'),borderRadius:6}]},
+    data:{labels:months,datasets:[{data:revByMonth,backgroundColor:revByMonth.map(v=>v>0?'rgba(79,124,255,0.7)':'rgba(79,124,255,0.1)'),borderRadius:6}]},
     options:chartOpts()
   });
-  const totalReceived=d.reduce((a,r)=>a+(r.amountReceived||0),0);
-  const totalRemaining=d.reduce((a,r)=>a+(r.remainingAmount||0),0);
   const totalUpfront=d.reduce((a,r)=>a+(r.upfrontPaid||0),0);
+  const totalRemaining=d.reduce((a,r)=>a+(r.remainingAmount||0),0);
   if(winRateInst)winRateInst.destroy();
   winRateInst=new Chart(document.getElementById('winRateChart'),{
     type:'doughnut',
-    data:{labels:['Upfront Paid','Amount Received','Remaining'],datasets:[{data:[totalUpfront,totalReceived,totalRemaining],backgroundColor:['#4f7cff','#00e5a0','#ffb830'],borderWidth:0,hoverOffset:6}]},
+    data:{labels:['Upfront Paid','Remaining'],datasets:[{data:[totalUpfront,totalRemaining],backgroundColor:['#00e5a0','#ffb830'],borderWidth:0,hoverOffset:6}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#7a85a3',font:{size:11},padding:12}}}}
   });
   renderDealsTable(d);
@@ -827,7 +817,7 @@ function renderDealsTable(data) {
   if(q)d=d.filter(r=>Object.values(r).join(' ').toLowerCase().includes(q));
   const body=document.getElementById('dealsBody');
   if(!d.length){
-    body.innerHTML=`<tr><td colspan="11"><div class="empty-state"><div class="empty-icon">📭</div><h4>No deals yet</h4><p>Click <strong>＋ Add Entry</strong> to get started.</p></div></td></tr>`;
+    body.innerHTML=`<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">📭</div><h4>No deals yet</h4><p>Click <strong>＋ Add Entry</strong> to get started.</p></div></td></tr>`;
     return;
   }
   body.innerHTML=d.map(r=>`<tr>
@@ -837,8 +827,7 @@ function renderDealsTable(data) {
     <td>${esc(r.services)}</td>
     <td><span class="badge badge-blue">${esc(r.dealNumber||'—')}</span></td>
     <td class="mono" style="color:var(--text2)">${fmt(r.totalCost||0)}</td>
-    <td class="mono" style="color:var(--accent)">${fmt(r.upfrontPaid||0)}</td>
-    <td class="mono" style="color:var(--accent2)">${fmt(r.bookingCost||0)}</td>
+    <td class="mono" style="color:var(--accent2)">${fmt(r.upfrontPaid||0)}</td>
     <td class="mono" style="color:var(--accent4)">${fmt(r.remainingAmount||0)}</td>
     <td>${esc(r.date)}</td>
     <td><div class="row-actions">
@@ -861,11 +850,11 @@ function renderAdmin() {
       <span class="badge badge-blue">${sum[sp]?.deals||0} deals</span>
       <button class="btn btn-danger" style="padding:6px 12px;font-size:11px" onclick="removeSP('${sp}')">✕</button>
     </div>`).join('');
-  const totalBooking=sampleData.reduce((a,r)=>a+(r.bookingCost||0),0);
-  const totalReceived=sampleData.reduce((a,r)=>a+(r.amountReceived||0),0);
+  const totalCost=sampleData.reduce((a,r)=>a+(r.totalCost||0),0);
+  const totalUpfront=sampleData.reduce((a,r)=>a+(r.upfrontPaid||0),0);
   document.getElementById('adminStats').innerHTML=`
     <div style="display:grid;gap:12px">
-      ${[['Total Booking Cost',fmt(totalBooking),'var(--accent2)'],['Total Received',fmt(totalReceived),'var(--accent2)'],['Team Members',salesPersons.length,'var(--accent)'],['Total Records',sampleData.length,'var(--accent)']].map(([l,v,c])=>`
+      ${[['Total Revenue',fmt(totalCost),'var(--accent2)'],['Upfront Received',fmt(totalUpfront),'var(--accent2)'],['Team Members',salesPersons.length,'var(--accent)'],['Total Records',sampleData.length,'var(--accent)']].map(([l,v,c])=>`
       <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg);border-radius:10px">
         <span style="color:var(--text2);font-size:13px">${l}</span>
         <span class="mono" style="color:${c};font-weight:700">${v}</span>
@@ -919,7 +908,6 @@ function openEntryModal(id) {
     document.getElementById('m_services').value       = r.services;
     document.getElementById('m_totalCost').value      = r.totalCost     || 0;
     document.getElementById('m_upfrontPaid').value    = r.upfrontPaid   || 0;
-    document.getElementById('m_bookingCost').value    = r.bookingCost   || 0;
     document.getElementById('m_remainingAmount').value= r.remainingAmount|| 0;
     document.getElementById('m_dealNumber').value     = r.dealNumber    || 'Deal #1';
     document.getElementById('m_date').value           = r.date;
@@ -930,7 +918,6 @@ function openEntryModal(id) {
     document.getElementById('m_services').value       = '';
     document.getElementById('m_totalCost').value      = '';
     document.getElementById('m_upfrontPaid').value    = '';
-    document.getElementById('m_bookingCost').value    = '';
     document.getElementById('m_remainingAmount').value= 0;
     document.getElementById('m_dealNumber').value     = '';
     document.getElementById('m_date').value           = new Date().toISOString().split('T')[0];
@@ -948,8 +935,7 @@ async function saveEntry() {
   const services        = document.getElementById('m_services').value.trim();
   const totalCost       = parseFloat(document.getElementById('m_totalCost').value)    || 0;
   const upfrontPaid     = parseFloat(document.getElementById('m_upfrontPaid').value)  || 0;
-  const bookingCost     = parseFloat(document.getElementById('m_bookingCost').value)   || 0;
-  const remainingAmount = Math.max(0, totalCost - upfrontPaid - bookingCost);
+  const remainingAmount = Math.max(0, totalCost - upfrontPaid);
   const dealNumber      = document.getElementById('m_dealNumber').value || 'Deal #1';
   const date            = document.getElementById('m_date').value;
   const err = document.getElementById('modalError');
@@ -960,7 +946,7 @@ async function saveEntry() {
     return;
   }
 
-  const entry = { salesperson:sp, client, clientEmail, services, totalCost, upfrontPaid, bookingCost, remainingAmount, dealNumber, date };
+  const entry = { salesperson:sp, client, clientEmail, services, totalCost, upfrontPaid, remainingAmount, dealNumber, date };
   showLoading('Saving to database…');
   try {
     await saveEntryToDB(entry, editingId);
@@ -976,7 +962,7 @@ async function saveEntry() {
 async function deleteEntry(id) {
   const r=sampleData.find(x=>x.id===id);
   if(!r)return;
-  if(!confirm(`Delete this entry?\n\n${r.salesperson} — ${r.client} — ${fmt(r.bookingCost||0)}`))return;
+  if(!confirm(`Delete this entry?\n\n${r.salesperson} — ${r.client} — ${fmt(r.totalCost||0)}`))return;
   showLoading('Deleting…');
   try {
     await deleteEntryFromDB(id);
@@ -994,7 +980,7 @@ function handleDrop(e){e.preventDefault();document.getElementById('uploadZone').
 function handleFileUpload(e){const f=e.target.files[0];if(f)processCSV(f);}
 function parseCSVLine(line){const out=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(inQ){if(ch==='"'&&line[i+1]==='"'){cur+='"';i++;}else if(ch==='"')inQ=false;else cur+=ch;}else{if(ch==='"')inQ=true;else if(ch===','){out.push(cur);cur='';}else cur+=ch;}}out.push(cur);return out.map(v=>v.trim());}
 function normalizeDate(s){if(!s)return new Date().toISOString().split('T')[0];s=String(s).trim();if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);let m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);if(m){let[_,d,mo,y]=m;if(y.length===2)y='20'+y;return`${y}-${mo.padStart(2,'0')}-${d.padStart(2,'0')}`;}const dt=new Date(s);if(!isNaN(dt.getTime()))return dt.toISOString().split('T')[0];return s;}
-function mapHeader(h){const k=h.toLowerCase().trim();if(/(sales\s*person|salesperson|rep|name|owner)/.test(k))return'salesperson';if(/(client|customer|account)/.test(k))return'client';if(/(service|product|item)/.test(k))return'services';if(/(upfront|advance)/.test(k))return'upfrontPaid';if(/(booking|cost|total|value|price|revenue|amount)/.test(k))return'bookingCost';if(/(received|paid|collected)/.test(k))return'amountReceived';if(/(date|closed)/.test(k))return'date';if(/(deals|count|qty)/.test(k))return'deals';return null;}
+function mapHeader(h){const k=h.toLowerCase().trim();if(/(sales\s*person|salesperson|rep|name|owner)/.test(k))return'salesperson';if(/(client|customer|account)/.test(k))return'client';if(/(service|product|item)/.test(k))return'services';if(/(upfront|advance)/.test(k))return'upfrontPaid';if(/(total|cost|value|price|revenue|amount)/.test(k))return'totalCost';if(/(date|closed)/.test(k))return'date';if(/(deals|count|qty)/.test(k))return'deals';return null;}
 
 function processCSV(file){
   const reader=new FileReader();
@@ -1006,7 +992,7 @@ function processCSV(file){
       if(lines.length<2){toast('⚠️ Need header + data rows');return;}
       const rawHeaders=parseCSVLine(lines[0]);
       const headerMap=rawHeaders.map(mapHeader);
-      csvRaw=lines.slice(1).map(line=>{const vals=parseCSVLine(line);const obj={};rawHeaders.forEach((h,i)=>obj._raw=obj._raw||{});headerMap.forEach((field,i)=>{if(field)obj[field]=vals[i]||'';});return obj;}).filter(r=>r.salesperson||r.client||r.bookingCost);
+      csvRaw=lines.slice(1).map(line=>{const vals=parseCSVLine(line);const obj={};rawHeaders.forEach((h,i)=>obj._raw=obj._raw||{});headerMap.forEach((field,i)=>{if(field)obj[field]=vals[i]||'';});return obj;}).filter(r=>r.salesperson||r.client||r.totalCost);
       if(!csvRaw.length){toast('⚠️ No usable rows found');return;}
       document.getElementById('csvFileName').textContent=file.name+' · '+csvRaw.length+' rows';
       renderCSVPreview(csvRaw);
@@ -1019,24 +1005,23 @@ function processCSV(file){
 
 function renderCSVPreview(rows){
   const t=document.getElementById('csvPreviewTable');
-  const cols=['salesperson','client','services','upfrontPaid','bookingCost','amountReceived','date','deals'];
+  const cols=['salesperson','client','services','totalCost','upfrontPaid','date','deals'];
   t.innerHTML=`<thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}<th>Del</th></tr></thead><tbody>${rows.map((r,i)=>`<tr>${cols.map(c=>`<td style="padding:6px 8px"><input value="${esc(r[c]||'')}" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:6px 8px;font-family:'DM Sans',sans-serif;font-size:12px;outline:none" oninput="csvRaw[${i}]['${c}']=this.value"></td>`).join('')}<td><button class="icon-btn del" onclick="removePreviewRow(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></td></tr>`).join('')}</tbody>`;
 }
 
 function removePreviewRow(i){csvRaw.splice(i,1);renderCSVPreview(csvRaw);}
-function addPreviewRow(){csvRaw.push({salesperson:'',client:'',services:'',upfrontPaid:'0',bookingCost:'0',amountReceived:'0',date:'',deals:'1'});renderCSVPreview(csvRaw);}
+function addPreviewRow(){csvRaw.push({salesperson:'',client:'',services:'',totalCost:'0',upfrontPaid:'0',date:'',deals:'1'});renderCSVPreview(csvRaw);}
 function clearCSV(){csvRaw=[];document.getElementById('csvPreviewCard').style.display='none';document.getElementById('fileInput').value='';}
 
 async function loadCSVData() {
   if(!csvRaw.length){toast('⚠️ Nothing to load');return;}
   const rows=csvRaw.map(r=>{
-    const bc=parseFloat(String(r.bookingCost||'').replace(/[^\d.\-]/g,''))||0;
-    const ar=parseFloat(String(r.amountReceived||'').replace(/[^\d.\-]/g,''))||0;
+    const tc=parseFloat(String(r.totalCost||'').replace(/[^\d.\-]/g,''))||0;
+    const up=parseFloat(String(r.upfrontPaid||'').replace(/[^\d.\-]/g,''))||0;
     return{salesperson:(r.salesperson||'').trim(),client:(r.client||'').trim(),services:(r.services||'').trim(),
-      upfront_paid:parseFloat(String(r.upfrontPaid||'').replace(/[^\d.\-]/g,''))||0,
-      booking_cost:bc,amount_received:ar,remaining_amount:Math.max(0,bc-ar),
+      upfront_paid:up,total_cost:tc,remaining_amount:Math.max(0,tc-up),
       date:normalizeDate(r.date),deals:parseInt(r.deals)||1};
-  }).filter(r=>r.salesperson&&r.booking_cost>=0);
+  }).filter(r=>r.salesperson&&r.total_cost>=0);
   if(!rows.length){toast('⚠️ No valid rows');return;}
   showLoading('Uploading to Supabase…');
   try {
@@ -1057,7 +1042,7 @@ async function loadCSVData() {
 }
 
 function downloadSampleCSV(){
-  const s='salesperson,client,services,upfrontpaid,bookingcost,amountreceived,date,deals\nRavi Kumar,TechCorp,Enterprise Suite,20000,95000,75000,2024-01-15,3\nSneha Patel,Innovate Ltd,Analytics Pro,15000,72000,57000,2024-01-22,2\n';
+  const s='salesperson,client,services,totalcost,upfrontpaid,date,deals\nRavi Kumar,TechCorp,SEO,95000,20000,2024-01-15,3\nSneha Patel,Innovate Ltd,Google Ads,72000,15000,2024-01-22,2\n';
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([s],{type:'text/csv'}));a.download='sample_sales.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);
   toast('📥 Sample CSV downloaded');
 }
