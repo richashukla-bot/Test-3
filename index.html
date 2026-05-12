@@ -305,8 +305,8 @@
         <div style="overflow-x:auto">
           <table>
             <thead><tr>
-              <th>Sales Person</th><th>Client</th><th>Services</th>
-              <th>Upfront Paid</th><th>Booking Cost</th><th>Amt Received</th><th>Remaining</th>
+              <th>Sales Person</th><th>Client</th><th>Email</th><th>Services</th><th>Deal</th>
+              <th>Total Cost</th><th>Upfront</th><th>Booking</th><th>Remaining</th>
               <th>Date</th><th style="width:80px">Actions</th>
             </tr></thead>
             <tbody id="dealsBody"></tbody>
@@ -381,33 +381,90 @@
   <div class="modal">
     <h3 id="modalTitle">Add Entry</h3>
     <div class="modal-sub" id="modalSub">Fill in the deal details below</div>
+
+    <!-- Sales Person -->
     <div class="form-group">
       <label>Sales Person</label>
       <input type="text" id="m_salesperson" list="m_sp_list" placeholder="Type or pick from list">
       <datalist id="m_sp_list"></datalist>
     </div>
+
+    <!-- Client Name + Client Email -->
     <div class="form-row">
-      <div class="form-group"><label>Client</label><input type="text" id="m_client" placeholder="Client name"></div>
-      <div class="form-group"><label>Services</label><input type="text" id="m_services" placeholder="Services"></div>
+      <div class="form-group">
+        <label>Client Name</label>
+        <input type="text" id="m_client" placeholder="Client name" onblur="lookupClientDeals()">
+      </div>
+      <div class="form-group">
+        <label>Client Email</label>
+        <input type="email" id="m_clientEmail" placeholder="client@company.com" onblur="lookupClientDeals()">
+      </div>
     </div>
+
+    <!-- Service dropdown + Deal Number (auto) -->
     <div class="form-row">
-      <div class="form-group"><label>Upfront Paid (₹)</label><input type="number" id="m_upfrontPaid" placeholder="0" min="0"></div>
-      <div class="form-group"><label>Booking Cost (₹)</label><input type="number" id="m_bookingCost" placeholder="0" min="0" oninput="calcRemaining()"></div>
+      <div class="form-group">
+        <label>Service</label>
+        <select id="m_services" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 16px;outline:none;width:100%;transition:border-color 0.2s">
+          <option value="">Select a service…</option>
+          <option value="SEO">SEO</option>
+          <option value="Google Ads">Google Ads</option>
+          <option value="Social Media">Social Media</option>
+          <option value="Web Design">Web Design</option>
+          <option value="Web Development">Web Development</option>
+          <option value="Email Marketing">Email Marketing</option>
+          <option value="Content Marketing">Content Marketing</option>
+          <option value="Branding">Branding</option>
+          <option value="Video Production">Video Production</option>
+          <option value="Photography">Photography</option>
+          <option value="Consulting">Consulting</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Deal Number</label>
+        <div class="input-wrap">
+          <input type="text" id="m_dealNumber" readonly class="readonly-input" tabindex="-1" placeholder="Auto-detected…">
+          <span class="auto-badge">AUTO</span>
+        </div>
+        <div id="dealNumHint" style="font-size:11px;color:var(--accent2);margin-top:5px;display:none"></div>
+      </div>
     </div>
+
+    <!-- Total Project Cost (full width) -->
+    <div class="form-group">
+      <label>Total Project Cost (₹)</label>
+      <input type="number" id="m_totalCost" placeholder="0" min="0" oninput="calcRemaining()">
+    </div>
+
+    <!-- Upfront Amount + Booking Cost -->
     <div class="form-row">
-      <div class="form-group"><label>Amount Received (₹)</label><input type="number" id="m_amountReceived" placeholder="0" min="0" oninput="calcRemaining()"></div>
+      <div class="form-group">
+        <label>Upfront Amount (₹)</label>
+        <input type="number" id="m_upfrontPaid" placeholder="0" min="0" oninput="calcRemaining()">
+      </div>
+      <div class="form-group">
+        <label>Booking Cost (₹)</label>
+        <input type="number" id="m_bookingCost" placeholder="0" min="0" oninput="calcRemaining()">
+      </div>
+    </div>
+
+    <!-- Remaining Amount (auto) + Date (auto today) -->
+    <div class="form-row">
       <div class="form-group">
         <label>Remaining Amount (₹)</label>
         <div class="input-wrap">
           <input type="number" id="m_remainingAmount" placeholder="0" readonly class="readonly-input" tabindex="-1">
           <span class="auto-badge">AUTO</span>
         </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:5px">Total − Upfront − Booking</div>
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="m_date">
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label>Deals</label><input type="number" id="m_deals" placeholder="1" min="1" value="1"></div>
-      <div class="form-group"><label>Date</label><input type="date" id="m_date"></div>
-    </div>
+
     <div class="error-msg" id="modalError" style="text-align:left">⚠️ Please fill all required fields.</div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeEntryModal()">Cancel</button>
@@ -455,15 +512,16 @@ async function loadDealsFromDB() {
 
     sampleData = (data || []).map(r => ({
       id:              r.id,
-      salesperson:     r.salesperson     || '',
-      client:          r.client          || '',
-      services:        r.services        || '',
-      upfrontPaid:     r.upfront_paid    || 0,
-      bookingCost:     r.booking_cost    || 0,
-      amountReceived:  r.amount_received || 0,
-      remainingAmount: r.remaining_amount|| 0,
-      deals:           r.deals           || 1,
-      date:            r.date            || '',
+      salesperson:     r.salesperson      || '',
+      client:          r.client           || '',
+      clientEmail:     r.client_email     || '',
+      services:        r.services         || '',
+      totalCost:       r.total_cost       || 0,
+      upfrontPaid:     r.upfront_paid     || 0,
+      bookingCost:     r.booking_cost     || 0,
+      remainingAmount: r.remaining_amount || 0,
+      dealNumber:      r.deal_number      || 'Deal #1',
+      date:            r.date             || '',
     }));
 
     // Auto-build salesPersons list from data
@@ -495,12 +553,13 @@ async function saveEntryToDB(entry, id) {
   const row = {
     salesperson:      entry.salesperson,
     client:           entry.client,
+    client_email:     entry.clientEmail,
     services:         entry.services,
+    total_cost:       entry.totalCost,
     upfront_paid:     entry.upfrontPaid,
     booking_cost:     entry.bookingCost,
-    amount_received:  entry.amountReceived,
     remaining_amount: entry.remainingAmount,
-    deals:            entry.deals,
+    deal_number:      entry.dealNumber,
     date:             entry.date,
   };
 
@@ -615,9 +674,42 @@ function summarise(data) {
 }
 
 function calcRemaining() {
-  const bc=parseFloat(document.getElementById('m_bookingCost').value)||0;
-  const ar=parseFloat(document.getElementById('m_amountReceived').value)||0;
-  document.getElementById('m_remainingAmount').value=Math.max(0,bc-ar);
+  const total   = parseFloat(document.getElementById('m_totalCost').value)   || 0;
+  const upfront = parseFloat(document.getElementById('m_upfrontPaid').value) || 0;
+  const booking = parseFloat(document.getElementById('m_bookingCost').value) || 0;
+  document.getElementById('m_remainingAmount').value = Math.max(0, total - upfront - booking);
+}
+
+// Auto-detect deal number from Supabase by client name or email
+async function lookupClientDeals() {
+  const clientName  = document.getElementById('m_client').value.trim();
+  const clientEmail = document.getElementById('m_clientEmail').value.trim();
+  if (!clientName && !clientEmail) return;
+  if (editingId) return;
+  const hint = document.getElementById('dealNumHint');
+  hint.style.display = 'none';
+  try {
+    let query = db.from('deals').select('id', { count: 'exact', head: true });
+    if (clientEmail && clientName) {
+      query = query.or('client_email.eq.' + clientEmail + ',client.ilike.' + clientName);
+    } else if (clientEmail) {
+      query = query.eq('client_email', clientEmail);
+    } else {
+      query = query.ilike('client', clientName);
+    }
+    const { count, error } = await query;
+    if (error) throw error;
+    const dealNum = (count || 0) + 1;
+    document.getElementById('m_dealNumber').value = 'Deal #' + dealNum;
+    hint.textContent = count > 0
+      ? count + ' previous deal' + (count > 1 ? 's' : '') + ' found — this is Deal #' + dealNum
+      : 'New client — this is their first deal';
+    hint.style.color = count > 0 ? 'var(--accent4)' : 'var(--accent2)';
+    hint.style.display = 'block';
+  } catch(e) {
+    document.getElementById('m_dealNumber').value = 'Deal #1';
+    console.warn('Deal lookup:', e.message);
+  }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -735,15 +827,18 @@ function renderDealsTable(data) {
   if(q)d=d.filter(r=>Object.values(r).join(' ').toLowerCase().includes(q));
   const body=document.getElementById('dealsBody');
   if(!d.length){
-    body.innerHTML=`<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📭</div><h4>No deals yet</h4><p>Click <strong>＋ Add Entry</strong> to get started.</p></div></td></tr>`;
+    body.innerHTML=`<tr><td colspan="11"><div class="empty-state"><div class="empty-icon">📭</div><h4>No deals yet</h4><p>Click <strong>＋ Add Entry</strong> to get started.</p></div></td></tr>`;
     return;
   }
   body.innerHTML=d.map(r=>`<tr>
     <td style="font-weight:600;color:var(--text)">${esc(r.salesperson)}</td>
-    <td>${esc(r.client)}</td><td>${esc(r.services)}</td>
+    <td>${esc(r.client)}</td>
+    <td style="font-size:12px;color:var(--text3)">${esc(r.clientEmail||'—')}</td>
+    <td>${esc(r.services)}</td>
+    <td><span class="badge badge-blue">${esc(r.dealNumber||'—')}</span></td>
+    <td class="mono" style="color:var(--text2)">${fmt(r.totalCost||0)}</td>
     <td class="mono" style="color:var(--accent)">${fmt(r.upfrontPaid||0)}</td>
     <td class="mono" style="color:var(--accent2)">${fmt(r.bookingCost||0)}</td>
-    <td class="mono" style="color:var(--accent2)">${fmt(r.amountReceived||0)}</td>
     <td class="mono" style="color:var(--accent4)">${fmt(r.remainingAmount||0)}</td>
     <td>${esc(r.date)}</td>
     <td><div class="row-actions">
@@ -806,59 +901,74 @@ function refreshSPSelects() {
 //  ADD / EDIT / DELETE
 // ═══════════════════════════════════════════════════════
 function openEntryModal(id) {
-  editingId=id??null;
-  const isEdit=id!=null;
-  document.getElementById('modalTitle').textContent=isEdit?'Edit Entry':'Add Entry';
-  document.getElementById('modalSub').textContent=isEdit?'Update the deal details below':'Fill in the deal details below';
-  document.getElementById('modalSaveBtn').textContent=isEdit?'Update Entry':'Save Entry';
-  document.getElementById('modalError').style.display='none';
-  document.getElementById('m_sp_list').innerHTML=salesPersons.map(sp=>`<option value="${esc(sp)}">`).join('');
-  if(isEdit){
-    const r=sampleData.find(x=>x.id===id);
-    if(!r){toast('⚠️ Row not found');return;}
-    document.getElementById('m_salesperson').value=r.salesperson;
-    document.getElementById('m_client').value=r.client;
-    document.getElementById('m_services').value=r.services;
-    document.getElementById('m_upfrontPaid').value=r.upfrontPaid||0;
-    document.getElementById('m_bookingCost').value=r.bookingCost||0;
-    document.getElementById('m_amountReceived').value=r.amountReceived||0;
-    document.getElementById('m_remainingAmount').value=r.remainingAmount||0;
-    document.getElementById('m_deals').value=r.deals;
-    document.getElementById('m_date').value=r.date;
+  editingId = id ?? null;
+  const isEdit = id != null;
+  document.getElementById('modalTitle').textContent    = isEdit ? 'Edit Entry'   : 'Add Entry';
+  document.getElementById('modalSub').textContent      = isEdit ? 'Update the deal details below' : 'Fill in the deal details below';
+  document.getElementById('modalSaveBtn').textContent  = isEdit ? 'Update Entry' : 'Save Entry';
+  document.getElementById('modalError').style.display  = 'none';
+  document.getElementById('dealNumHint').style.display = 'none';
+  document.getElementById('m_sp_list').innerHTML = salesPersons.map(sp => `<option value="${esc(sp)}">`).join('');
+
+  if (isEdit) {
+    const r = sampleData.find(x => x.id === id);
+    if (!r) { toast('⚠️ Row not found'); return; }
+    document.getElementById('m_salesperson').value    = r.salesperson;
+    document.getElementById('m_client').value         = r.client;
+    document.getElementById('m_clientEmail').value    = r.clientEmail   || '';
+    document.getElementById('m_services').value       = r.services;
+    document.getElementById('m_totalCost').value      = r.totalCost     || 0;
+    document.getElementById('m_upfrontPaid').value    = r.upfrontPaid   || 0;
+    document.getElementById('m_bookingCost').value    = r.bookingCost   || 0;
+    document.getElementById('m_remainingAmount').value= r.remainingAmount|| 0;
+    document.getElementById('m_dealNumber').value     = r.dealNumber    || 'Deal #1';
+    document.getElementById('m_date').value           = r.date;
   } else {
-    document.getElementById('m_salesperson').value=currentRole==='sales'?currentUser:'';
-    ['m_client','m_services','m_upfrontPaid','m_bookingCost','m_amountReceived'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('m_remainingAmount').value=0;
-    document.getElementById('m_deals').value=1;
-    document.getElementById('m_date').value=new Date().toISOString().split('T')[0];
+    document.getElementById('m_salesperson').value    = currentRole === 'sales' ? currentUser : '';
+    document.getElementById('m_client').value         = '';
+    document.getElementById('m_clientEmail').value    = '';
+    document.getElementById('m_services').value       = '';
+    document.getElementById('m_totalCost').value      = '';
+    document.getElementById('m_upfrontPaid').value    = '';
+    document.getElementById('m_bookingCost').value    = '';
+    document.getElementById('m_remainingAmount').value= 0;
+    document.getElementById('m_dealNumber').value     = '';
+    document.getElementById('m_date').value           = new Date().toISOString().split('T')[0];
   }
   document.getElementById('entryModal').classList.add('show');
-  setTimeout(()=>document.getElementById('m_salesperson').focus(),50);
+  setTimeout(() => document.getElementById('m_salesperson').focus(), 50);
 }
 
 function closeEntryModal(){ document.getElementById('entryModal').classList.remove('show'); editingId=null; }
 
 async function saveEntry() {
-  const sp            =document.getElementById('m_salesperson').value.trim();
-  const client        =document.getElementById('m_client').value.trim();
-  const services      =document.getElementById('m_services').value.trim();
-  const upfrontPaid   =parseFloat(document.getElementById('m_upfrontPaid').value)||0;
-  const bookingCost   =parseFloat(document.getElementById('m_bookingCost').value)||0;
-  const amountReceived=parseFloat(document.getElementById('m_amountReceived').value)||0;
-  const remainingAmount=Math.max(0,bookingCost-amountReceived);
-  const deals         =parseInt(document.getElementById('m_deals').value)||1;
-  const date          =document.getElementById('m_date').value;
-  const err=document.getElementById('modalError');
-  if(!sp||!client||!services||!date){err.textContent='⚠️ Please fill Sales Person, Client, Services and Date.';err.style.display='block';return;}
-  const entry={salesperson:sp,client,services,upfrontPaid,bookingCost,amountReceived,remainingAmount,deals,date};
+  const sp              = document.getElementById('m_salesperson').value.trim();
+  const client          = document.getElementById('m_client').value.trim();
+  const clientEmail     = document.getElementById('m_clientEmail').value.trim();
+  const services        = document.getElementById('m_services').value.trim();
+  const totalCost       = parseFloat(document.getElementById('m_totalCost').value)    || 0;
+  const upfrontPaid     = parseFloat(document.getElementById('m_upfrontPaid').value)  || 0;
+  const bookingCost     = parseFloat(document.getElementById('m_bookingCost').value)   || 0;
+  const remainingAmount = Math.max(0, totalCost - upfrontPaid - bookingCost);
+  const dealNumber      = document.getElementById('m_dealNumber').value || 'Deal #1';
+  const date            = document.getElementById('m_date').value;
+  const err = document.getElementById('modalError');
+
+  if (!sp || !client || !services || !date) {
+    err.textContent = '⚠️ Please fill Sales Person, Client Name, Service and Date.';
+    err.style.display = 'block';
+    return;
+  }
+
+  const entry = { salesperson:sp, client, clientEmail, services, totalCost, upfrontPaid, bookingCost, remainingAmount, dealNumber, date };
   showLoading('Saving to database…');
   try {
     await saveEntryToDB(entry, editingId);
-    toast(editingId?'✏️ Entry updated':'✅ Entry saved to Supabase');
+    toast(editingId ? '✏️ Entry updated' : '✅ Entry saved to Supabase');
     closeEntryModal();
     await loadDealsFromDB();
   } catch(err2) {
-    toast('❌ Save failed: '+err2.message);
+    toast('❌ Save failed: ' + err2.message);
     console.error(err2);
   } finally { hideLoading(); }
 }
