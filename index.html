@@ -15,31 +15,30 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-
-  /* LOGIN */
   #loginScreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;
     background-image:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(79,124,255,0.12) 0%,transparent 70%),
     radial-gradient(ellipse 40% 30% at 80% 80%,rgba(0,229,160,0.06) 0%,transparent 60%);}
-  .login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:48px 44px;width:420px;
+  .login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:48px 44px;width:440px;max-width:92vw;
     box-shadow:0 40px 120px rgba(0,0,0,0.6),0 0 0 1px rgba(79,124,255,0.08);animation:fadeUp 0.5s ease;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
   .login-logo{font-family:'DM Serif Display',serif;font-size:26px;color:var(--accent);margin-bottom:8px;letter-spacing:-0.5px;}
   .login-logo span{color:var(--accent2);}
-  .login-sub{color:var(--text2);font-size:13px;margin-bottom:36px;}
-  .login-tabs{display:flex;gap:8px;margin-bottom:28px;background:var(--bg);border-radius:10px;padding:4px;}
-  .tab-btn{flex:1;padding:8px;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--text2);}
+  .login-sub{color:var(--text2);font-size:13px;margin-bottom:30px;}
+  .login-tabs{display:flex;gap:8px;margin-bottom:24px;background:var(--bg);border-radius:10px;padding:4px;}
+  .tab-btn{flex:1;padding:10px;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;background:transparent;color:var(--text2);}
   .tab-btn.active{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(79,124,255,0.35);}
-  .form-group{margin-bottom:18px;}
+  .form-group{margin-bottom:16px;}
   .form-group label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.6px;}
   .form-group input,.form-group select{width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
   .form-group input:focus,.form-group select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,124,255,0.12);}
-  .form-group select option{background:var(--bg);}
   .login-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#6b96ff);border:none;border-radius:12px;color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.3px;box-shadow:0 8px 32px rgba(79,124,255,0.35);margin-top:8px;}
   .login-btn:hover{transform:translateY(-1px);box-shadow:0 12px 40px rgba(79,124,255,0.45);}
-  .login-hint{text-align:center;margin-top:20px;font-size:12px;color:var(--text3);background:var(--bg);border-radius:8px;padding:10px 12px;line-height:1.7;}
-  .error-msg{color:var(--accent3);font-size:13px;margin-top:10px;text-align:center;display:none;}
-
-  /* LAYOUT */
+  .login-btn:disabled{opacity:0.5;cursor:not-allowed;}
+  .login-link{text-align:center;margin-top:14px;font-size:13px;color:var(--text2);}
+  .login-link a{color:var(--accent);cursor:pointer;text-decoration:none;font-weight:600;}
+  .login-link a:hover{text-decoration:underline;}
+  .error-msg{color:var(--accent3);font-size:13px;margin-top:10px;text-align:center;display:none;padding:10px;background:rgba(255,95,126,0.08);border-radius:8px;border:1px solid rgba(255,95,126,0.2);}
+  .success-msg{color:var(--accent2);font-size:13px;margin-top:10px;text-align:center;display:none;padding:10px;background:rgba(0,229,160,0.08);border-radius:8px;border:1px solid rgba(0,229,160,0.2);}
   #app{display:none;}
   .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50;}
   .sidebar-logo{padding:24px 24px 20px;font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent);letter-spacing:-0.5px;border-bottom:1px solid var(--border);}
@@ -64,27 +63,16 @@
   .page-title{font-family:'DM Serif Display',serif;font-size:32px;letter-spacing:-0.8px;}
   .page-title span{color:var(--accent);}
   .header-actions{display:flex;gap:12px;align-items:center;}
-
-  /* KPI */
   .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:28px;}
   .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;}
   .kpi-card:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(0,0,0,0.3);}
-  .kpi-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--card-color,var(--accent)) 0%,transparent 60%);opacity:0.04;}
   .kpi-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:18px;}
   .kpi-val{font-family:'DM Serif Display',serif;font-size:30px;letter-spacing:-1px;color:var(--text);margin-bottom:4px;}
   .kpi-label{font-size:12px;color:var(--text2);font-weight:500;text-transform:uppercase;letter-spacing:0.6px;}
-  .kpi-delta{margin-top:10px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px;}
-  .kpi-delta.up{color:var(--accent2);}
-  .kpi-delta.down{color:var(--accent3);}
-
-  /* CHARTS */
   .chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:28px;}
   .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;}
   .chart-card h3{font-size:15px;font-weight:600;margin-bottom:20px;color:var(--text);display:flex;justify-content:space-between;align-items:center;}
-  .chart-card h3 small{font-size:11px;color:var(--text2);font-weight:400;}
   .chart-wrap{position:relative;height:240px;}
-
-  /* TABLE */
   .table-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:28px;}
   .table-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
   .table-header h3{font-size:15px;font-weight:600;}
@@ -100,47 +88,31 @@
   .badge-blue{background:rgba(79,124,255,0.12);color:var(--accent);}
   .progress-bar{height:5px;background:var(--bg);border-radius:3px;overflow:hidden;width:90px;}
   .progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
-
-  /* UPLOAD */
   .upload-zone{border:2px dashed var(--border);border-radius:16px;padding:48px 32px;text-align:center;cursor:pointer;transition:all 0.3s;background:var(--surface);margin-bottom:24px;}
   .upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:rgba(79,124,255,0.04);}
   .upload-icon{font-size:48px;margin-bottom:16px;}
   .upload-zone h3{font-size:17px;margin-bottom:8px;}
   .upload-zone p{font-size:13px;color:var(--text2);}
   #fileInput{display:none;}
-
   .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;border:none;}
   .btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 16px rgba(79,124,255,0.3);}
   .btn-primary:hover{background:#5f8bff;}
   .btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border);}
   .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
-  .btn-danger{background:transparent;color:var(--accent3);border:1px solid rgba(255,95,126,0.3);}
-
-  /* ADMIN */
   .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;}
   .user-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(30,37,64,0.6);}
   .user-row:last-child{border-bottom:none;}
   .user-row-info{flex:1;}
   .user-row-name{font-size:14px;font-weight:600;color:var(--text);}
   .user-row-email{font-size:12px;color:var(--text2);}
-
-  /* TOAST */
   #toast{position:fixed;bottom:32px;right:32px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 20px;font-size:14px;color:var(--text);z-index:999;transform:translateY(80px);opacity:0;transition:all 0.3s;display:flex;align-items:center;gap:10px;box-shadow:0 16px 48px rgba(0,0,0,0.4);}
   #toast.show{transform:translateY(0);opacity:1;}
-
-  /* LOADING */
   #loadingOverlay{position:fixed;inset:0;z-index:300;background:rgba(10,13,20,0.85);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
   #loadingOverlay.show{display:flex;}
   .spinner{width:40px;height:40px;border:3px solid rgba(79,124,255,0.2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg)}}
   .loading-text{font-size:14px;color:var(--text2);}
-
   .mono{font-family:'JetBrains Mono',monospace;}
-  .hosting-box{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px;}
-  .hosting-box h3{font-size:16px;font-weight:700;margin-bottom:6px;}
-  .hosting-box p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px;}
-  .hosting-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(0,229,160,0.1);color:var(--accent2);margin-right:8px;margin-bottom:8px;}
-  .section-title{font-size:14px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
   .rank-num{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text3);width:32px;text-align:right;}
   select.filter-select{background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 12px;outline:none;cursor:pointer;}
   .info-note{font-size:12px;color:var(--text3);margin-top:6px;line-height:1.6;padding:10px 14px;background:var(--bg);border-radius:8px;border-left:3px solid var(--accent);}
@@ -149,8 +121,6 @@
   .icon-btn:hover{color:var(--accent);border-color:var(--accent);}
   .icon-btn.del:hover{color:var(--accent3);border-color:var(--accent3);}
   .icon-btn svg{width:14px;height:14px;}
-
-  /* MODAL */
   .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(8,11,18,0.78);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;}
   .modal-overlay.show{display:flex;animation:fadeUp 0.2s ease;}
   .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;width:100%;max-width:520px;box-shadow:0 40px 120px rgba(0,0,0,0.6);max-height:90vh;overflow-y:auto;}
@@ -166,55 +136,54 @@
   .empty-state .empty-icon{font-size:42px;margin-bottom:14px;opacity:0.6;}
   .empty-state h4{font-size:16px;color:var(--text);margin-bottom:6px;font-weight:600;}
   .empty-state p{font-size:13px;line-height:1.6;}
+  .domain-hint{font-size:11px;color:var(--accent2);margin-top:6px;display:flex;align-items:center;gap:4px;}
 </style>
 </head>
 <body>
 
-<!-- LOADING OVERLAY -->
 <div id="loadingOverlay">
   <div class="spinner"></div>
-  <div class="loading-text" id="loadingText">Connecting to database…</div>
+  <div class="loading-text" id="loadingText">Connecting…</div>
 </div>
 
-<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">Sales<span>Pro</span></div>
-    <div class="login-sub">Performance Intelligence Platform</div>
+    <div class="login-sub" id="authSub">Sign in to your account</div>
     <div class="login-tabs">
-      <button class="tab-btn active" onclick="setRole('admin')">Admin</button>
-      <button class="tab-btn" onclick="setRole('sales')">Sales Person</button>
+      <button class="tab-btn active" id="signInTab" onclick="switchAuthMode('signin')">Sign In</button>
+      <button class="tab-btn" id="signUpTab" onclick="switchAuthMode('signup')">Sign Up</button>
+    </div>
+    <div class="form-group" id="fullNameField" style="display:none">
+      <label>Full Name</label>
+      <input type="text" id="authFullName" placeholder="John Doe" autocomplete="name">
     </div>
     <div class="form-group">
-      <label>Username</label>
-      <input type="text" id="loginUser" placeholder="Enter username" autocomplete="off">
+      <label>Email Address</label>
+      <input type="email" id="authEmail" placeholder="you@itgeeks.com" autocomplete="email">
+      <div class="domain-hint">🔒 Only @itgeeks.com emails are allowed</div>
     </div>
     <div class="form-group">
       <label>Password</label>
-      <input type="password" id="loginPass" placeholder="Enter password">
+      <input type="password" id="authPassword" placeholder="At least 6 characters" autocomplete="current-password">
     </div>
-    <div class="form-group" id="salesPersonField" style="display:none">
-      <label>Login As</label>
-      <select id="salesPersonSelect"><option value="">Select sales person…</option></select>
-    </div>
-    <button class="login-btn" onclick="doLogin()">Sign In →</button>
-    <div class="error-msg" id="loginError">❌ Invalid credentials. Please try again.</div>
-    <div class="login-hint">
-      <strong>Admin:</strong> admin / admin123<br>
-      <strong>Sales:</strong> sales / sales123 — then pick your name
+    <button class="login-btn" onclick="handleAuth()" id="authBtn">Sign In →</button>
+    <div class="error-msg" id="authError"></div>
+    <div class="success-msg" id="authSuccess"></div>
+    <div class="login-link" id="forgotLink">
+      <a onclick="forgotPassword()">Forgot password?</a>
     </div>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <aside class="sidebar">
     <div class="sidebar-logo">Sales<span>Pro</span></div>
     <div class="sidebar-user">
-      <div class="user-avatar" id="sideUserAvatar">A</div>
+      <div class="user-avatar" id="sideUserAvatar">U</div>
       <div class="user-info">
-        <div class="user-name" id="sideUserName">Admin</div>
-        <div class="user-role" id="sideUserRole">Administrator</div>
+        <div class="user-name" id="sideUserName">User</div>
+        <div class="user-role" id="sideUserRole">Sales Person</div>
       </div>
     </div>
     <nav class="nav">
@@ -226,7 +195,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
         Performance
       </div>
-      <div class="nav-item" onclick="showPage('upload')">
+      <div class="nav-item admin-only" onclick="showPage('upload')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Upload CSV
       </div>
@@ -244,7 +213,6 @@
   </aside>
 
   <main class="main">
-    <!-- OVERVIEW -->
     <section class="page active" id="page-overview">
       <div class="page-header">
         <div class="page-title">Dashboard <span>Overview</span></div>
@@ -259,7 +227,7 @@
       <div class="kpi-grid" id="kpiGrid"></div>
       <div class="chart-grid">
         <div class="chart-card">
-          <h3>Monthly Revenue <small id="chartPeriodLabel"></small></h3>
+          <h3>Monthly Revenue</h3>
           <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
         </div>
         <div class="chart-card">
@@ -267,7 +235,7 @@
           <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
         </div>
       </div>
-      <div class="table-card">
+      <div class="table-card admin-only">
         <div class="table-header">
           <h3>🏆 Leaderboard</h3>
           <span class="badge badge-blue">All Time</span>
@@ -279,12 +247,11 @@
       </div>
     </section>
 
-    <!-- PERFORMANCE -->
     <section class="page" id="page-performance">
       <div class="page-header">
         <div class="page-title">Sales <span>Performance</span></div>
         <div class="header-actions">
-          <select class="filter-select" id="spFilter" onchange="renderPerformancePage()">
+          <select class="filter-select admin-only" id="spFilter" onchange="renderPerformancePage()">
             <option value="">All Sales Persons</option>
           </select>
         </div>
@@ -295,7 +262,7 @@
       </div>
       <div class="table-card">
         <div class="table-header">
-          <h3>📋 All Deals</h3>
+          <h3>📋 My Deals</h3>
           <div style="display:flex;gap:10px;align-items:center">
             <input type="text" id="searchDeals" placeholder="Search…" oninput="renderDealsTable()"
               style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
@@ -315,7 +282,6 @@
       </div>
     </section>
 
-    <!-- UPLOAD -->
     <section class="page" id="page-upload">
       <div class="page-header">
         <div class="page-title">Upload <span>CSV Data</span></div>
@@ -332,7 +298,7 @@
         <input type="file" id="fileInput" accept=".csv" onchange="handleFileUpload(event)">
       </div>
       <div class="info-note" style="margin-bottom:24px">
-        📌 <strong>Expected columns:</strong> salesperson, client, services, totalcost, upfrontpaid, amountreceived, date, deals
+        📌 <strong>Expected columns:</strong> salesperson, client, services, totalcost, upfrontpaid, date
       </div>
       <div class="chart-card" id="csvPreviewCard" style="display:none">
         <h3>📄 Preview <small id="csvFileName"></small></h3>
@@ -341,31 +307,24 @@
         </div>
         <div style="margin-top:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
           <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);cursor:pointer">
-            <input type="checkbox" id="replaceMode" checked style="accent-color:var(--accent);width:16px;height:16px">
+            <input type="checkbox" id="replaceMode" style="accent-color:var(--accent);width:16px;height:16px">
             Replace existing data
           </label>
           <div style="flex:1"></div>
           <button class="btn btn-primary" onclick="loadCSVData()">✅ Load Data</button>
-          <button class="btn btn-outline" onclick="addPreviewRow()">＋ Add Row</button>
           <button class="btn btn-outline" onclick="clearCSV()">✖ Clear</button>
         </div>
       </div>
     </section>
 
-    <!-- ADMIN -->
     <section class="page" id="page-admin">
       <div class="page-header"><div class="page-title">Admin <span>Panel</span></div></div>
       <div class="admin-grid">
         <div class="chart-card">
-          <h3>👥 Sales Team</h3>
+          <h3>👥 Team Members</h3>
           <div id="adminUserList" style="margin-top:8px"></div>
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
-            <div class="section-title">Add New Person</div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <input id="newSpName" placeholder="Full name" style="flex:1;min-width:120px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
-              <input id="newSpTarget" placeholder="Target ₹" type="number" style="width:110px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
-              <button class="btn btn-primary" onclick="addSalesPerson()">Add</button>
-            </div>
+          <div class="info-note" style="margin-top:16px">
+            💡 Team members are added automatically when they sign up with their @itgeeks.com email.
           </div>
         </div>
         <div class="chart-card"><h3>📈 Quick Stats</h3><div id="adminStats" style="margin-top:8px"></div></div>
@@ -376,20 +335,16 @@
 
 <div id="toast">✅ <span id="toastMsg">Done!</span></div>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="entryModal" onclick="if(event.target===this)closeEntryModal()">
   <div class="modal">
     <h3 id="modalTitle">Add Entry</h3>
     <div class="modal-sub" id="modalSub">Fill in the deal details below</div>
 
-    <!-- Sales Person -->
     <div class="form-group">
       <label>Sales Person</label>
-      <input type="text" id="m_salesperson" list="m_sp_list" placeholder="Type or pick from list">
-      <datalist id="m_sp_list"></datalist>
+      <input type="text" id="m_salesperson" readonly class="readonly-input">
     </div>
 
-    <!-- Client Name + Client Email -->
     <div class="form-row">
       <div class="form-group">
         <label>Client Name</label>
@@ -401,11 +356,10 @@
       </div>
     </div>
 
-    <!-- Service dropdown + Deal Number (auto) -->
     <div class="form-row">
       <div class="form-group">
         <label>Service</label>
-        <select id="m_services" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 16px;outline:none;width:100%;transition:border-color 0.2s">
+        <select id="m_services" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 16px;outline:none;width:100%">
           <option value="">Select a service…</option>
           <option value="SEO">SEO</option>
           <option value="Google Ads">Google Ads</option>
@@ -431,22 +385,20 @@
       </div>
     </div>
 
-    <!-- Total Project Cost + Upfront Amount -->
     <div class="form-row">
       <div class="form-group">
-        <label>Total Project Cost (₹)</label>
+        <label>Total Project Cost</label>
         <input type="number" id="m_totalCost" placeholder="0" min="0" oninput="calcRemaining()">
       </div>
       <div class="form-group">
-        <label>Upfront Amount (₹)</label>
+        <label>Upfront Amount</label>
         <input type="number" id="m_upfrontPaid" placeholder="0" min="0" oninput="calcRemaining()">
       </div>
     </div>
 
-    <!-- Remaining Amount (auto) + Date (auto today) -->
     <div class="form-row">
       <div class="form-group">
-        <label>Remaining Amount (₹)</label>
+        <label>Remaining Amount</label>
         <div class="input-wrap">
           <input type="number" id="m_remainingAmount" placeholder="0" readonly class="readonly-input" tabindex="-1">
           <span class="auto-badge">AUTO</span>
@@ -473,160 +425,210 @@
 // ═══════════════════════════════════════════════════════
 const SUPABASE_URL  = 'https://ovaojwgjsclqmeozxwyj.supabase.co';
 const SUPABASE_KEY  = 'sb_publishable_tWs2gh62cvfbSuFFf8QPFA_zS7Cao5k';
+const ALLOWED_DOMAIN = '@itgeeks.com';
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ═══════════════════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════════════════
-let currentRole = 'admin';
-let currentUser = '';
+let authMode = 'signin';
+let currentUser = null;
+let currentProfile = null;
+let isAdmin = false;
 let salesPersons = [];
 let targets = {};
-let sampleData = [];       // all deals loaded from Supabase
-let activeData  = [];      // filtered view
+let sampleData = [];
 let revenueChartInst, categoryChartInst, perfLineInst, winRateInst;
 let csvRaw = [];
 let editingId = null;
 
-// ═══════════════════════════════════════════════════════
-//  LOADING HELPERS
-// ═══════════════════════════════════════════════════════
 function showLoading(msg){ document.getElementById('loadingText').textContent = msg||'Loading…'; document.getElementById('loadingOverlay').classList.add('show'); }
 function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('show'); }
 
 // ═══════════════════════════════════════════════════════
-//  SUPABASE — LOAD ALL DEALS
+//  AUTH
 // ═══════════════════════════════════════════════════════
-async function loadDealsFromDB() {
-  showLoading('Loading deals from database…');
+function switchAuthMode(mode) {
+  authMode = mode;
+  const isSignup = mode === 'signup';
+  document.getElementById('signInTab').classList.toggle('active', !isSignup);
+  document.getElementById('signUpTab').classList.toggle('active', isSignup);
+  document.getElementById('fullNameField').style.display = isSignup ? 'block' : 'none';
+  document.getElementById('authBtn').textContent = isSignup ? 'Create Account →' : 'Sign In →';
+  document.getElementById('authSub').textContent = isSignup ? 'Create your @itgeeks.com account' : 'Sign in to your account';
+  document.getElementById('forgotLink').style.display = isSignup ? 'none' : 'block';
+  document.getElementById('authError').style.display = 'none';
+  document.getElementById('authSuccess').style.display = 'none';
+}
+
+function validateEmail(email) { return email.toLowerCase().endsWith(ALLOWED_DOMAIN); }
+
+function showAuthError(msg) {
+  const el = document.getElementById('authError');
+  el.textContent = '❌ ' + msg;
+  el.style.display = 'block';
+  document.getElementById('authSuccess').style.display = 'none';
+}
+
+function showAuthSuccess(msg) {
+  const el = document.getElementById('authSuccess');
+  el.textContent = '✅ ' + msg;
+  el.style.display = 'block';
+  document.getElementById('authError').style.display = 'none';
+}
+
+async function handleAuth() {
+  const email    = document.getElementById('authEmail').value.trim().toLowerCase();
+  const password = document.getElementById('authPassword').value;
+  const fullName = document.getElementById('authFullName').value.trim();
+
+  if (!email || !password) { showAuthError('Please enter email and password'); return; }
+  if (!validateEmail(email)) { showAuthError('Only @itgeeks.com emails are allowed'); return; }
+  if (password.length < 6) { showAuthError('Password must be at least 6 characters'); return; }
+  if (authMode === 'signup' && !fullName) { showAuthError('Please enter your full name'); return; }
+
+  document.getElementById('authBtn').disabled = true;
+  showLoading(authMode === 'signup' ? 'Creating account…' : 'Signing in…');
+
   try {
-    const { data, error } = await db.from('deals').select('*').order('id', { ascending: false });
-    if (error) throw error;
-
-    sampleData = (data || []).map(r => ({
-      id:              r.id,
-      salesperson:     r.salesperson      || '',
-      client:          r.client           || '',
-      clientEmail:     r.client_email     || '',
-      services:        r.services         || '',
-      totalCost:       r.total_cost       || 0,
-      upfrontPaid:     r.upfront_paid     || 0,
-      remainingAmount: r.remaining_amount || 0,
-      dealNumber:      r.deal_number      || 'Deal #1',
-      date:            r.date             || '',
-    }));
-
-    // Auto-build salesPersons list from data
-    sampleData.forEach(r => {
-      if (r.salesperson && !salesPersons.includes(r.salesperson)) {
-        salesPersons.push(r.salesperson);
-        if (!targets[r.salesperson]) targets[r.salesperson] = 500000;
-      }
-    });
-
-    if (currentRole === 'sales') activeData = sampleData.filter(r => r.salesperson === currentUser);
-    else activeData = [...sampleData];
-
-    refreshSPSelects();
-    renderAll();
-    if (document.getElementById('page-performance').classList.contains('active')) renderPerformancePage();
-  } catch(err) {
-    toast('❌ DB error: ' + err.message);
-    console.error(err);
+    if (authMode === 'signup') {
+      const { error } = await db.auth.signUp({
+        email, password,
+        options: { data: { full_name: fullName } }
+      });
+      if (error) throw error;
+      showAuthSuccess('Account created! Check your email to verify, then sign in.');
+      setTimeout(() => switchAuthMode('signin'), 2500);
+    } else {
+      const { error } = await db.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+    }
+  } catch (err) {
+    showAuthError(err.message || 'Authentication failed');
   } finally {
+    document.getElementById('authBtn').disabled = false;
     hideLoading();
   }
 }
 
+async function forgotPassword() {
+  const email = document.getElementById('authEmail').value.trim().toLowerCase();
+  if (!email) { showAuthError('Enter your email first, then click Forgot password'); return; }
+  if (!validateEmail(email)) { showAuthError('Only @itgeeks.com emails are allowed'); return; }
+  showLoading('Sending reset email…');
+  try {
+    const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    if (error) throw error;
+    showAuthSuccess('Password reset link sent! Check your email.');
+  } catch (err) { showAuthError(err.message); }
+  finally { hideLoading(); }
+}
+
+async function doLogout() {
+  showLoading('Signing out…');
+  await db.auth.signOut();
+  currentUser = null; currentProfile = null; isAdmin = false;
+  sampleData = []; salesPersons = []; targets = {};
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('authEmail').value = '';
+  document.getElementById('authPassword').value = '';
+  document.getElementById('authFullName').value = '';
+  hideLoading();
+}
+
+db.auth.onAuthStateChange(async (event, session) => {
+  if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
+    if (!currentUser) {
+      currentUser = session.user;
+      await loadUserProfile();
+      await launchApp();
+    }
+  } else if (event === 'SIGNED_OUT') {
+    currentUser = null; currentProfile = null; isAdmin = false;
+  }
+});
+
+(async () => {
+  const { data } = await db.auth.getSession();
+  if (data.session?.user) {
+    currentUser = data.session.user;
+    await loadUserProfile();
+    await launchApp();
+  }
+})();
+
+async function loadUserProfile() {
+  const { data, error } = await db.from('profiles').select('*').eq('id', currentUser.id).single();
+  if (error) { console.error('Profile load error:', error); return; }
+  currentProfile = data;
+  isAdmin = data.role === 'admin';
+}
+
+async function launchApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  const name = currentProfile?.full_name || currentUser.email.split('@')[0];
+  document.getElementById('sideUserName').textContent = name;
+  document.getElementById('sideUserRole').textContent = isAdmin ? 'Administrator' : 'Sales Person';
+  document.getElementById('sideUserAvatar').textContent = name.charAt(0).toUpperCase();
+  document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin ? '' : 'none');
+  await loadDealsFromDB();
+  if (isAdmin) await loadAllProfiles();
+}
+
+async function loadAllProfiles() {
+  const { data, error } = await db.from('profiles').select('*').order('created_at', { ascending: true });
+  if (error) { console.error(error); return; }
+  salesPersons = (data || []).map(p => p.full_name || p.email.split('@')[0]);
+  salesPersons.forEach(sp => { if (!targets[sp]) targets[sp] = 500000; });
+  refreshSPSelects();
+}
+
 // ═══════════════════════════════════════════════════════
-//  SUPABASE — SAVE ENTRY
+//  DEALS
 // ═══════════════════════════════════════════════════════
+async function loadDealsFromDB() {
+  showLoading('Loading deals…');
+  try {
+    const { data, error } = await db.from('deals').select('*').order('id', { ascending: false });
+    if (error) throw error;
+    sampleData = (data || []).map(r => ({
+      id: r.id, user_id: r.user_id,
+      salesperson: r.salesperson || '', client: r.client || '',
+      clientEmail: r.client_email || '', services: r.services || '',
+      totalCost: r.total_cost || 0, upfrontPaid: r.upfront_paid || 0,
+      remainingAmount: r.remaining_amount || 0,
+      dealNumber: r.deal_number || 'Deal #1', date: r.date || '',
+    }));
+    renderAll();
+    if (document.getElementById('page-performance').classList.contains('active')) renderPerformancePage();
+  } catch(err) { toast('❌ DB error: ' + err.message); console.error(err); }
+  finally { hideLoading(); }
+}
+
 async function saveEntryToDB(entry, id) {
   const row = {
-    salesperson:      entry.salesperson,
-    client:           entry.client,
-    client_email:     entry.clientEmail,
-    services:         entry.services,
-    total_cost:       entry.totalCost,
-    upfront_paid:     entry.upfrontPaid,
-    remaining_amount: entry.remainingAmount,
-    deal_number:      entry.dealNumber,
-    date:             entry.date,
+    user_id: currentUser.id,
+    salesperson: entry.salesperson, client: entry.client, client_email: entry.clientEmail,
+    services: entry.services, total_cost: entry.totalCost, upfront_paid: entry.upfrontPaid,
+    remaining_amount: entry.remainingAmount, deal_number: entry.dealNumber, date: entry.date,
   };
-
   if (id) {
-    // UPDATE
     const { error } = await db.from('deals').update(row).eq('id', id);
     if (error) throw error;
   } else {
-    // INSERT
     const { error } = await db.from('deals').insert([row]);
     if (error) throw error;
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  SUPABASE — DELETE ENTRY
-// ═══════════════════════════════════════════════════════
 async function deleteEntryFromDB(id) {
   const { error } = await db.from('deals').delete().eq('id', id);
   if (error) throw error;
 }
 
-// ═══════════════════════════════════════════════════════
-//  AUTH
-// ═══════════════════════════════════════════════════════
-function setRole(role) {
-  currentRole = role;
-  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active',(i===0&&role==='admin')||(i===1&&role==='sales')));
-  document.getElementById('salesPersonField').style.display = role==='sales'?'block':'none';
-  if (role==='sales') populateSPSelect();
-}
-
-function populateSPSelect() {
-  const sel = document.getElementById('salesPersonSelect');
-  sel.innerHTML = salesPersons.length
-    ? '<option value="">Select sales person…</option>' + salesPersons.map(sp=>`<option value="${sp}">${sp}</option>`).join('')
-    : '<option value="">⚠️ No team members yet</option>';
-}
-
-function doLogin() {
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value.trim();
-  const err = document.getElementById('loginError');
-  err.style.display = 'none';
-  if (currentRole==='admin') {
-    if (u==='admin'&&p==='admin123') { currentUser='Admin'; launchApp(); }
-    else err.style.display='block';
-  } else {
-    const sp = document.getElementById('salesPersonSelect').value;
-    if (u==='sales'&&p==='sales123'&&sp) { currentUser=sp; launchApp(); }
-    else err.style.display='block';
-  }
-}
-
-async function launchApp() {
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('app').style.display='block';
-  document.getElementById('sideUserName').textContent=currentUser;
-  document.getElementById('sideUserRole').textContent=currentRole==='admin'?'Administrator':'Sales Person';
-  document.getElementById('sideUserAvatar').textContent=currentUser.charAt(0).toUpperCase();
-  document.querySelectorAll('.admin-only').forEach(el=>el.style.display=currentRole==='admin'?'flex':'none');
-  await loadDealsFromDB();
-}
-
-function doLogout() {
-  document.getElementById('app').style.display='none';
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('loginUser').value='';
-  document.getElementById('loginPass').value='';
-  sampleData=[]; activeData=[]; salesPersons=[]; targets={};
-}
-
-// ═══════════════════════════════════════════════════════
-//  NAVIGATION
-// ═══════════════════════════════════════════════════════
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -636,14 +638,11 @@ function showPage(name) {
   if (name==='admin') renderAdmin();
 }
 
-// ═══════════════════════════════════════════════════════
-//  HELPERS
-// ═══════════════════════════════════════════════════════
-const fmt = v => '₹'+Number(v).toLocaleString('en-IN');
+const fmt = v => Number(v).toLocaleString('en-IN');
 function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function getFilteredData() {
-  let d = currentRole==='sales' ? activeData : [...sampleData];
+  let d = [...sampleData];
   const p = document.getElementById('periodFilter')?.value||'all';
   if (p!=='all') {
     const qMap={q1:[1,3],q2:[4,6],q3:[7,9],q4:[10,12]};
@@ -659,19 +658,18 @@ function summarise(data) {
   data.forEach(r=>{
     if(!map[r.salesperson])map[r.salesperson]={totalCost:0,deals:0,total:0};
     map[r.salesperson].totalCost+=(r.totalCost||0);
-    map[r.salesperson].deals+=(r.deals||1);
+    map[r.salesperson].deals+=1;
     map[r.salesperson].total++;
   });
   return map;
 }
 
 function calcRemaining() {
-  const total   = parseFloat(document.getElementById('m_totalCost').value)   || 0;
+  const total = parseFloat(document.getElementById('m_totalCost').value) || 0;
   const upfront = parseFloat(document.getElementById('m_upfrontPaid').value) || 0;
   document.getElementById('m_remainingAmount').value = Math.max(0, total - upfront);
 }
 
-// Auto-detect deal number from Supabase by client name or email
 async function lookupClientDeals() {
   const clientName  = document.getElementById('m_client').value.trim();
   const clientEmail = document.getElementById('m_clientEmail').value.trim();
@@ -692,9 +690,7 @@ async function lookupClientDeals() {
     if (error) throw error;
     const dealNum = (count || 0) + 1;
     document.getElementById('m_dealNumber').value = 'Deal #' + dealNum;
-    hint.textContent = count > 0
-      ? count + ' previous deal' + (count > 1 ? 's' : '') + ' found — this is Deal #' + dealNum
-      : 'New client — this is their first deal';
+    hint.textContent = count > 0 ? count + ' previous deal' + (count > 1 ? 's' : '') + ' found — this is Deal #' + dealNum : 'New client — this is their first deal';
     hint.style.color = count > 0 ? 'var(--accent4)' : 'var(--accent2)';
     hint.style.display = 'block';
   } catch(e) {
@@ -703,31 +699,26 @@ async function lookupClientDeals() {
   }
 }
 
-// ═══════════════════════════════════════════════════════
-//  RENDER
-// ═══════════════════════════════════════════════════════
-function renderAll(){ renderKPIs(); renderCharts(); renderLeaderboard(); }
+function renderAll(){ renderKPIs(); renderCharts(); if (isAdmin) renderLeaderboard(); }
 function refreshCharts(){ renderAll(); }
 
 function renderKPIs() {
   const d=getFilteredData();
-  const totalCost     =d.reduce((a,r)=>a+(r.totalCost||0),0);
-  const totalUpfront  =d.reduce((a,r)=>a+(r.upfrontPaid||0),0);
+  const totalCost=d.reduce((a,r)=>a+(r.totalCost||0),0);
+  const totalUpfront=d.reduce((a,r)=>a+(r.upfrontPaid||0),0);
   const totalRemaining=d.reduce((a,r)=>a+(r.remainingAmount||0),0);
-  const totalDeals    =d.reduce((a,r)=>a+(r.deals||1),0);
-  const avgDeal=totalDeals?Math.round(totalCost/totalDeals):0;
+  const avgDeal=d.length?Math.round(totalCost/d.length):0;
   const kpis=[
-    {label:'Total Revenue',    val:fmt(totalCost),     delta:'+12.4%',up:true, icon:'💰',col:'#4f7cff'},
-    {label:'Upfront Received', val:fmt(totalUpfront),  delta:'+8.1%', up:true, icon:'✅',col:'#00e5a0'},
-    {label:'Remaining Amount', val:fmt(totalRemaining),delta:'',      up:false,icon:'⏳',col:'#ffb830'},
-    {label:'Avg Deal Size',    val:fmt(avgDeal),       delta:'-1.5%', up:false,icon:'📊',col:'#ff5f7e'},
+    {label:'Total Revenue',val:fmt(totalCost),icon:'💰',col:'#4f7cff'},
+    {label:'Upfront Received',val:fmt(totalUpfront),icon:'✅',col:'#00e5a0'},
+    {label:'Remaining Amount',val:fmt(totalRemaining),icon:'⏳',col:'#ffb830'},
+    {label:'Avg Deal Size',val:fmt(avgDeal),icon:'📊',col:'#ff5f7e'},
   ];
   document.getElementById('kpiGrid').innerHTML=kpis.map(k=>`
-    <div class="kpi-card" style="--card-color:${k.col}">
+    <div class="kpi-card">
       <div class="kpi-icon" style="background:${k.col}18">${k.icon}</div>
       <div class="kpi-val">${k.val}</div>
       <div class="kpi-label">${k.label}</div>
-      ${k.delta?`<div class="kpi-delta ${k.up?'up':'down'}">${k.up?'▲':'▼'} ${k.delta} vs last period</div>`:''}
     </div>`).join('');
 }
 
@@ -749,7 +740,7 @@ function renderCharts() {
   if(categoryChartInst)categoryChartInst.destroy();
   categoryChartInst=new Chart(document.getElementById('categoryChart'),{
     type:'doughnut',
-    data:{labels:Object.keys(catMap),datasets:[{data:Object.values(catMap),backgroundColor:['#4f7cff','#00e5a0','#ffb830','#ff5f7e'],borderWidth:0,hoverOffset:6}]},
+    data:{labels:Object.keys(catMap),datasets:[{data:Object.values(catMap),backgroundColor:['#4f7cff','#00e5a0','#ffb830','#ff5f7e','#a78bfa','#f472b6'],borderWidth:0,hoverOffset:6}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#7a85a3',font:{size:11},padding:12}}}}
   });
 }
@@ -757,7 +748,7 @@ function renderCharts() {
 function chartOpts(){
   return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
     scales:{x:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#7a85a3',font:{size:11}}},
-    y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#7a85a3',font:{size:11},callback:v=>'₹'+Number(v/1000).toFixed(0)+'k'}}}};
+    y:{grid:{color:'rgba(255,255,255,0.03)'},ticks:{color:'#7a85a3',font:{size:11},callback:v=>Number(v/1000).toFixed(0)+'k'}}}};
 }
 
 function renderLeaderboard() {
@@ -767,7 +758,7 @@ function renderLeaderboard() {
   const medals=['🥇','🥈','🥉'];
   const body=document.getElementById('leaderBody');
   if(!sorted.length){
-    body.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📊</div><h4>No data yet</h4><p>Add entries from the Performance page.</p></div></td></tr>`;
+    body.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📊</div><h4>No data yet</h4><p>Team will appear here once they add deals.</p></div></td></tr>`;
     return;
   }
   body.innerHTML=sorted.map(([sp,v],i)=>{
@@ -775,7 +766,7 @@ function renderLeaderboard() {
     const pct=Math.min(100,Math.round(v.totalCost/tgt*100));
     return`<tr>
       <td><span class="rank-num">${medals[i]||'#'+(i+1)}</span></td>
-      <td style="font-weight:600;color:var(--text)">${sp}</td>
+      <td style="font-weight:600;color:var(--text)">${esc(sp)}</td>
       <td style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">${fmt(v.totalCost)}</td>
       <td>${v.deals}</td>
       <td class="mono">${v.deals?fmt(Math.round(v.totalCost/v.deals)):'—'}</td>
@@ -786,8 +777,8 @@ function renderLeaderboard() {
 }
 
 function renderPerformancePage() {
-  const spf=document.getElementById('spFilter').value;
-  let d=currentRole==='sales'?sampleData.filter(r=>r.salesperson===currentUser):[...sampleData];
+  const spf=isAdmin?(document.getElementById('spFilter')?.value||''):'';
+  let d=[...sampleData];
   if(spf)d=d.filter(r=>r.salesperson===spf);
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const revByMonth=Array(12).fill(0);
@@ -810,9 +801,9 @@ function renderPerformancePage() {
 }
 
 function renderDealsTable(data) {
-  const spf=document.getElementById('spFilter').value;
+  const spf=isAdmin?(document.getElementById('spFilter')?.value||''):'';
   const q=document.getElementById('searchDeals')?.value?.toLowerCase()||'';
-  let d=data||(currentRole==='sales'?sampleData.filter(r=>r.salesperson===currentUser):[...sampleData]);
+  let d=data||[...sampleData];
   if(!data&&spf)d=d.filter(r=>r.salesperson===spf);
   if(q)d=d.filter(r=>Object.values(r).join(' ').toLowerCase().includes(q));
   const body=document.getElementById('dealsBody');
@@ -841,20 +832,24 @@ function renderDealsTable(data) {
   </tr>`).join('');
 }
 
-function renderAdmin() {
+async function renderAdmin() {
+  await loadAllProfiles();
+  const { data: profiles } = await db.from('profiles').select('*').order('created_at', { ascending: true });
   const sum=summarise(sampleData);
-  document.getElementById('adminUserList').innerHTML=salesPersons.map(sp=>`
-    <div class="user-row">
-      <div class="user-avatar" style="width:34px;height:34px;font-size:13px">${sp.charAt(0)}</div>
-      <div class="user-row-info"><div class="user-row-name">${sp}</div><div class="user-row-email">Target: ${fmt(targets[sp]||500000)}</div></div>
-      <span class="badge badge-blue">${sum[sp]?.deals||0} deals</span>
-      <button class="btn btn-danger" style="padding:6px 12px;font-size:11px" onclick="removeSP('${sp}')">✕</button>
-    </div>`).join('');
+  document.getElementById('adminUserList').innerHTML=(profiles||[]).map(p=>{
+    const name = p.full_name || p.email.split('@')[0];
+    return `<div class="user-row">
+      <div class="user-avatar" style="width:34px;height:34px;font-size:13px">${name.charAt(0).toUpperCase()}</div>
+      <div class="user-row-info"><div class="user-row-name">${esc(name)}</div><div class="user-row-email">${esc(p.email)}</div></div>
+      <span class="badge ${p.role==='admin'?'badge-green':'badge-blue'}">${p.role}</span>
+      <span class="badge badge-yellow">${sum[name]?.deals||0} deals</span>
+    </div>`;
+  }).join('');
   const totalCost=sampleData.reduce((a,r)=>a+(r.totalCost||0),0);
   const totalUpfront=sampleData.reduce((a,r)=>a+(r.upfrontPaid||0),0);
   document.getElementById('adminStats').innerHTML=`
     <div style="display:grid;gap:12px">
-      ${[['Total Revenue',fmt(totalCost),'var(--accent2)'],['Upfront Received',fmt(totalUpfront),'var(--accent2)'],['Team Members',salesPersons.length,'var(--accent)'],['Total Records',sampleData.length,'var(--accent)']].map(([l,v,c])=>`
+      ${[['Total Revenue',fmt(totalCost),'var(--accent2)'],['Upfront Received',fmt(totalUpfront),'var(--accent2)'],['Team Members',(profiles||[]).length,'var(--accent)'],['Total Deals',sampleData.length,'var(--accent)']].map(([l,v,c])=>`
       <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg);border-radius:10px">
         <span style="color:var(--text2);font-size:13px">${l}</span>
         <span class="mono" style="color:${c};font-weight:700">${v}</span>
@@ -862,86 +857,65 @@ function renderAdmin() {
     </div>`;
 }
 
-function addSalesPerson() {
-  const name=document.getElementById('newSpName').value.trim();
-  const tgt=parseInt(document.getElementById('newSpTarget').value)||500000;
-  if(!name){toast('⚠️ Enter a name');return;}
-  if(salesPersons.includes(name)){toast('⚠️ Already exists');return;}
-  salesPersons.push(name); targets[name]=tgt;
-  document.getElementById('newSpName').value='';
-  document.getElementById('newSpTarget').value='';
-  renderAdmin(); refreshSPSelects(); toast('✅ '+name+' added!');
-}
-
-function removeSP(name) {
-  if(!confirm(`Remove ${name}?`))return;
-  salesPersons=salesPersons.filter(s=>s!==name); delete targets[name];
-  renderAdmin(); refreshSPSelects(); renderAll(); toast('🗑️ '+name+' removed');
-}
-
 function refreshSPSelects() {
   const spf=document.getElementById('spFilter');
   if(spf){const cur=spf.value;spf.innerHTML='<option value="">All Sales Persons</option>'+salesPersons.map(sp=>`<option value="${esc(sp)}">${esc(sp)}</option>`).join('');spf.value=cur;}
-  const lps=document.getElementById('salesPersonSelect');
-  if(lps)lps.innerHTML='<option value="">Select sales person…</option>'+salesPersons.map(sp=>`<option value="${esc(sp)}">${esc(sp)}</option>`).join('');
 }
 
-// ═══════════════════════════════════════════════════════
-//  ADD / EDIT / DELETE
-// ═══════════════════════════════════════════════════════
 function openEntryModal(id) {
   editingId = id ?? null;
   const isEdit = id != null;
-  document.getElementById('modalTitle').textContent    = isEdit ? 'Edit Entry'   : 'Add Entry';
-  document.getElementById('modalSub').textContent      = isEdit ? 'Update the deal details below' : 'Fill in the deal details below';
-  document.getElementById('modalSaveBtn').textContent  = isEdit ? 'Update Entry' : 'Save Entry';
-  document.getElementById('modalError').style.display  = 'none';
+  document.getElementById('modalTitle').textContent = isEdit ? 'Edit Entry' : 'Add Entry';
+  document.getElementById('modalSub').textContent = isEdit ? 'Update the deal details below' : 'Fill in the deal details below';
+  document.getElementById('modalSaveBtn').textContent = isEdit ? 'Update Entry' : 'Save Entry';
+  document.getElementById('modalError').style.display = 'none';
   document.getElementById('dealNumHint').style.display = 'none';
-  document.getElementById('m_sp_list').innerHTML = salesPersons.map(sp => `<option value="${esc(sp)}">`).join('');
+
+  const myName = currentProfile?.full_name || currentUser.email.split('@')[0];
 
   if (isEdit) {
     const r = sampleData.find(x => x.id === id);
     if (!r) { toast('⚠️ Row not found'); return; }
-    document.getElementById('m_salesperson').value    = r.salesperson;
-    document.getElementById('m_client').value         = r.client;
-    document.getElementById('m_clientEmail').value    = r.clientEmail   || '';
-    document.getElementById('m_services').value       = r.services;
-    document.getElementById('m_totalCost').value      = r.totalCost     || 0;
-    document.getElementById('m_upfrontPaid').value    = r.upfrontPaid   || 0;
-    document.getElementById('m_remainingAmount').value= r.remainingAmount|| 0;
-    document.getElementById('m_dealNumber').value     = r.dealNumber    || 'Deal #1';
-    document.getElementById('m_date').value           = r.date;
+    document.getElementById('m_salesperson').value = r.salesperson;
+    document.getElementById('m_client').value = r.client;
+    document.getElementById('m_clientEmail').value = r.clientEmail || '';
+    document.getElementById('m_services').value = r.services;
+    document.getElementById('m_totalCost').value = r.totalCost || 0;
+    document.getElementById('m_upfrontPaid').value = r.upfrontPaid || 0;
+    document.getElementById('m_remainingAmount').value = r.remainingAmount || 0;
+    document.getElementById('m_dealNumber').value = r.dealNumber || 'Deal #1';
+    document.getElementById('m_date').value = r.date;
   } else {
-    document.getElementById('m_salesperson').value    = currentRole === 'sales' ? currentUser : '';
-    document.getElementById('m_client').value         = '';
-    document.getElementById('m_clientEmail').value    = '';
-    document.getElementById('m_services').value       = '';
-    document.getElementById('m_totalCost').value      = '';
-    document.getElementById('m_upfrontPaid').value    = '';
-    document.getElementById('m_remainingAmount').value= 0;
-    document.getElementById('m_dealNumber').value     = '';
-    document.getElementById('m_date').value           = new Date().toISOString().split('T')[0];
+    document.getElementById('m_salesperson').value = myName;
+    document.getElementById('m_client').value = '';
+    document.getElementById('m_clientEmail').value = '';
+    document.getElementById('m_services').value = '';
+    document.getElementById('m_totalCost').value = '';
+    document.getElementById('m_upfrontPaid').value = '';
+    document.getElementById('m_remainingAmount').value = 0;
+    document.getElementById('m_dealNumber').value = '';
+    document.getElementById('m_date').value = new Date().toISOString().split('T')[0];
   }
   document.getElementById('entryModal').classList.add('show');
-  setTimeout(() => document.getElementById('m_salesperson').focus(), 50);
+  setTimeout(() => document.getElementById('m_client').focus(), 50);
 }
 
 function closeEntryModal(){ document.getElementById('entryModal').classList.remove('show'); editingId=null; }
 
 async function saveEntry() {
-  const sp              = document.getElementById('m_salesperson').value.trim();
-  const client          = document.getElementById('m_client').value.trim();
-  const clientEmail     = document.getElementById('m_clientEmail').value.trim();
-  const services        = document.getElementById('m_services').value.trim();
-  const totalCost       = parseFloat(document.getElementById('m_totalCost').value)    || 0;
-  const upfrontPaid     = parseFloat(document.getElementById('m_upfrontPaid').value)  || 0;
+  const sp = document.getElementById('m_salesperson').value.trim();
+  const client = document.getElementById('m_client').value.trim();
+  const clientEmail = document.getElementById('m_clientEmail').value.trim();
+  const services = document.getElementById('m_services').value.trim();
+  const totalCost = parseFloat(document.getElementById('m_totalCost').value) || 0;
+  const upfrontPaid = parseFloat(document.getElementById('m_upfrontPaid').value) || 0;
   const remainingAmount = Math.max(0, totalCost - upfrontPaid);
-  const dealNumber      = document.getElementById('m_dealNumber').value || 'Deal #1';
-  const date            = document.getElementById('m_date').value;
+  const dealNumber = document.getElementById('m_dealNumber').value || 'Deal #1';
+  const date = document.getElementById('m_date').value;
   const err = document.getElementById('modalError');
 
   if (!sp || !client || !services || !date) {
-    err.textContent = '⚠️ Please fill Sales Person, Client Name, Service and Date.';
+    err.textContent = '⚠️ Please fill Client Name, Service and Date.';
     err.style.display = 'block';
     return;
   }
@@ -950,7 +924,7 @@ async function saveEntry() {
   showLoading('Saving to database…');
   try {
     await saveEntryToDB(entry, editingId);
-    toast(editingId ? '✏️ Entry updated' : '✅ Entry saved to Supabase');
+    toast(editingId ? '✏️ Entry updated' : '✅ Entry saved');
     closeEntryModal();
     await loadDealsFromDB();
   } catch(err2) {
@@ -968,19 +942,15 @@ async function deleteEntry(id) {
     await deleteEntryFromDB(id);
     toast('🗑️ Entry deleted');
     await loadDealsFromDB();
-  } catch(err) {
-    toast('❌ Delete failed: '+err.message);
-  } finally { hideLoading(); }
+  } catch(err) { toast('❌ Delete failed: '+err.message); }
+  finally { hideLoading(); }
 }
 
-// ═══════════════════════════════════════════════════════
-//  CSV
-// ═══════════════════════════════════════════════════════
 function handleDrop(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f&&/\.csv$/i.test(f.name))processCSV(f);else toast('⚠️ Please drop a .csv file');}
 function handleFileUpload(e){const f=e.target.files[0];if(f)processCSV(f);}
 function parseCSVLine(line){const out=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(inQ){if(ch==='"'&&line[i+1]==='"'){cur+='"';i++;}else if(ch==='"')inQ=false;else cur+=ch;}else{if(ch==='"')inQ=true;else if(ch===','){out.push(cur);cur='';}else cur+=ch;}}out.push(cur);return out.map(v=>v.trim());}
 function normalizeDate(s){if(!s)return new Date().toISOString().split('T')[0];s=String(s).trim();if(/^\d{4}-\d{2}-\d{2}/.test(s))return s.slice(0,10);let m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);if(m){let[_,d,mo,y]=m;if(y.length===2)y='20'+y;return`${y}-${mo.padStart(2,'0')}-${d.padStart(2,'0')}`;}const dt=new Date(s);if(!isNaN(dt.getTime()))return dt.toISOString().split('T')[0];return s;}
-function mapHeader(h){const k=h.toLowerCase().trim();if(/(sales\s*person|salesperson|rep|name|owner)/.test(k))return'salesperson';if(/(client|customer|account)/.test(k))return'client';if(/(service|product|item)/.test(k))return'services';if(/(upfront|advance)/.test(k))return'upfrontPaid';if(/(total|cost|value|price|revenue|amount)/.test(k))return'totalCost';if(/(date|closed)/.test(k))return'date';if(/(deals|count|qty)/.test(k))return'deals';return null;}
+function mapHeader(h){const k=h.toLowerCase().trim();if(/(sales\s*person|salesperson|rep|owner)/.test(k))return'salesperson';if(/(client|customer|account)/.test(k))return'client';if(/(service|product|item)/.test(k))return'services';if(/(upfront|advance)/.test(k))return'upfrontPaid';if(/(total|cost|value|price|revenue|amount)/.test(k))return'totalCost';if(/(date|closed)/.test(k))return'date';return null;}
 
 function processCSV(file){
   const reader=new FileReader();
@@ -992,7 +962,7 @@ function processCSV(file){
       if(lines.length<2){toast('⚠️ Need header + data rows');return;}
       const rawHeaders=parseCSVLine(lines[0]);
       const headerMap=rawHeaders.map(mapHeader);
-      csvRaw=lines.slice(1).map(line=>{const vals=parseCSVLine(line);const obj={};rawHeaders.forEach((h,i)=>obj._raw=obj._raw||{});headerMap.forEach((field,i)=>{if(field)obj[field]=vals[i]||'';});return obj;}).filter(r=>r.salesperson||r.client||r.totalCost);
+      csvRaw=lines.slice(1).map(line=>{const vals=parseCSVLine(line);const obj={};headerMap.forEach((field,i)=>{if(field)obj[field]=vals[i]||'';});return obj;}).filter(r=>r.salesperson||r.client||r.totalCost);
       if(!csvRaw.length){toast('⚠️ No usable rows found');return;}
       document.getElementById('csvFileName').textContent=file.name+' · '+csvRaw.length+' rows';
       renderCSVPreview(csvRaw);
@@ -1005,12 +975,10 @@ function processCSV(file){
 
 function renderCSVPreview(rows){
   const t=document.getElementById('csvPreviewTable');
-  const cols=['salesperson','client','services','totalCost','upfrontPaid','date','deals'];
-  t.innerHTML=`<thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}<th>Del</th></tr></thead><tbody>${rows.map((r,i)=>`<tr>${cols.map(c=>`<td style="padding:6px 8px"><input value="${esc(r[c]||'')}" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:6px 8px;font-family:'DM Sans',sans-serif;font-size:12px;outline:none" oninput="csvRaw[${i}]['${c}']=this.value"></td>`).join('')}<td><button class="icon-btn del" onclick="removePreviewRow(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></td></tr>`).join('')}</tbody>`;
+  const cols=['salesperson','client','services','totalCost','upfrontPaid','date'];
+  t.innerHTML=`<thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>`<tr>${cols.map(c=>`<td style="padding:6px 8px"><input value="${esc(r[c]||'')}" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:6px 8px;font-family:'DM Sans',sans-serif;font-size:12px;outline:none" oninput="csvRaw[${i}]['${c}']=this.value"></td>`).join('')}</tr>`).join('')}</tbody>`;
 }
 
-function removePreviewRow(i){csvRaw.splice(i,1);renderCSVPreview(csvRaw);}
-function addPreviewRow(){csvRaw.push({salesperson:'',client:'',services:'',totalCost:'0',upfrontPaid:'0',date:'',deals:'1'});renderCSVPreview(csvRaw);}
 function clearCSV(){csvRaw=[];document.getElementById('csvPreviewCard').style.display='none';document.getElementById('fileInput').value='';}
 
 async function loadCSVData() {
@@ -1018,12 +986,17 @@ async function loadCSVData() {
   const rows=csvRaw.map(r=>{
     const tc=parseFloat(String(r.totalCost||'').replace(/[^\d.\-]/g,''))||0;
     const up=parseFloat(String(r.upfrontPaid||'').replace(/[^\d.\-]/g,''))||0;
-    return{salesperson:(r.salesperson||'').trim(),client:(r.client||'').trim(),services:(r.services||'').trim(),
+    return{
+      user_id:currentUser.id,
+      salesperson:(r.salesperson||'').trim(),
+      client:(r.client||'').trim(),
+      services:(r.services||'').trim(),
       upfront_paid:up,total_cost:tc,remaining_amount:Math.max(0,tc-up),
-      date:normalizeDate(r.date),deals:parseInt(r.deals)||1};
+      date:normalizeDate(r.date)
+    };
   }).filter(r=>r.salesperson&&r.total_cost>=0);
   if(!rows.length){toast('⚠️ No valid rows');return;}
-  showLoading('Uploading to Supabase…');
+  showLoading('Uploading…');
   try {
     if(document.getElementById('replaceMode').checked){
       const{error:delErr}=await db.from('deals').delete().neq('id',0);
@@ -1031,29 +1004,24 @@ async function loadCSVData() {
     }
     const{error}=await db.from('deals').insert(rows);
     if(error)throw error;
-    toast('✅ '+rows.length+' records uploaded to Supabase');
+    toast('✅ '+rows.length+' records uploaded');
     clearCSV();
     await loadDealsFromDB();
     showPage('overview');
-  } catch(err){
-    toast('❌ Upload failed: '+err.message);
-    console.error(err);
-  } finally { hideLoading(); }
+  } catch(err){ toast('❌ Upload failed: '+err.message); console.error(err); }
+  finally { hideLoading(); }
 }
 
 function downloadSampleCSV(){
-  const s='salesperson,client,services,totalcost,upfrontpaid,date,deals\nRavi Kumar,TechCorp,SEO,95000,20000,2024-01-15,3\nSneha Patel,Innovate Ltd,Google Ads,72000,15000,2024-01-22,2\n';
+  const s='salesperson,client,services,totalcost,upfrontpaid,date\nRavi Kumar,TechCorp,SEO,95000,20000,2024-01-15\nSneha Patel,Innovate Ltd,Google Ads,72000,15000,2024-01-22\n';
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([s],{type:'text/csv'}));a.download='sample_sales.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);
   toast('📥 Sample CSV downloaded');
 }
 
-// ═══════════════════════════════════════════════════════
-//  TOAST
-// ═══════════════════════════════════════════════════════
 let toastTimer;
 function toast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3500);}
 
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('loginScreen').style.display!=='none')doLogin();});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('loginScreen').style.display!=='none')handleAuth();});
 </script>
 </body>
 </html>
